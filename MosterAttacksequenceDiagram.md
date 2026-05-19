@@ -2,17 +2,26 @@
 sequenceDiagram
     actor Player as 플레이어
     participant UI as Attack_Monster_UI
+    participant Session as 세션
     participant Battle as 전투
     participant PlayerObj as 플레이어
     participant Character as 캐릭터(전사/마법사)
     
     Player->>UI: 몬스터공격화면()
-    UI->>Battle: 몬스터공격(플레이어id, 캐릭터객체)
+    
+    UI->>Session: getAttribute("battle")
+    Session-->>UI: return 전투 객체
+    Note right of UI: 캐릭터생성 시<br/>저장된 전투 객체 재사용
+    
+    UI->>Battle: 몬스터공격(플레이어id)
     
     Battle->>PlayerObj: 플레이어체크(플레이어id)
     
     alt 플레이어id == "hero"
         PlayerObj-->>Battle: return true
+        
+        Battle->>Battle: 보관된 캐릭터 객체 사용
+        Note right of Battle: this.캐릭터에서<br/>꺼내서 사용
         
         Battle->>Character: 스킬발동()
         

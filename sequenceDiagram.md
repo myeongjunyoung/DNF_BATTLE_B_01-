@@ -23,7 +23,11 @@ sequenceDiagram
         end
         
         Character-->>Battle: return 캐릭터 객체
-        Battle-->>UI: return 캐릭터
+        
+        Battle->>Battle: this.캐릭터 = 캐릭터 객체
+        Note right of Battle: 전투 클래스 내부에<br/>캐릭터 객체 보관
+        
+        Battle-->>UI: return 캐릭터 객체
         UI-->>Player: 캐릭터 정보 출력
     else 플레이어id != "hero"
         PlayerObj-->>Battle: return false
